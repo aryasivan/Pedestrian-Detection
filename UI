@@ -1,0 +1,80 @@
+import tkinter
+import tkinter as tk
+import os
+from tkinter import *
+from tkinter import filedialog
+from PIL import Image, ImageTk
+from yolo_video import augu
+import cv2
+import numpy as np
+
+window=tkinter.Tk()
+window.title("check")
+window.geometry(
+        "{0}x{1}+0+0".format(window.winfo_screenwidth(), window.winfo_screenheight()))
+# window.configure(background ="blue")
+
+title =tkinter.Label(window,text="Click below to choose video for testing ....", background = "black", fg="white", font=("", 15)).pack()
+
+
+
+def openfn():
+    filename = filedialog.askopenfilename(title='open')
+    return filename
+
+
+def open_img():
+    global h
+    x = openfn()
+    img = Image.open(x)
+    img = img.resize((50, 50), Image.ANTIALIAS)
+    img = ImageTk.PhotoImage(img)
+    m = x
+    k=os.path.abspath(m)
+    #print(k)
+    panel = tkinter.Label(window, image=img)
+    panel.image = img
+    panel.pack()
+    # btn1 = tkinter.Button(window, text='analysis')
+    # btn1.pack()
+
+#optional
+
+
+def open_vdo():
+    k=openfn()
+    file=os.path.split(k)
+    #x = snd1()
+    print(file[1])
+    augu(file[1])
+    #btn1 = tkinter.Button(window, text='TEST')
+    #btn1.pack()
+def open_out():
+    cap = cv2.VideoCapture('aa.avi')
+    if (cap.isOpened() == False):
+        print("Error opening video stream or file")
+    while (cap.isOpened()):
+        ret, frame = cap.read()
+        if ret == True:
+            cv2.imshow('Frame', frame)
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+def snd1():
+    os.system(openfn())
+# btn1 = tkinter.Button(window, text='OPEN IMAGE', command=open_img).pack()
+btn2 = tkinter.Button(window, text='OPEN VIDEO', command=open_vdo).pack()
+btn3 = tkinter.Button(window, text='OUTPUT', command=open_out).pack()
+
+image = Image.open('bmw1.jpg')
+photo_image = ImageTk.PhotoImage(image)
+label = tk.Label(window, image = photo_image)
+label.pack()
+
+window.mainloop()
+
